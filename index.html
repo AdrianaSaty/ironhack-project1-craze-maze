@@ -5,28 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Maze Craze</title>
 </head>
 <body>
-
+    
     <div>
-        <canvas></canvas>
-        <ul>
-          <li><label>Width:</label><input id="width" type="text"/></li>
-          <li><label>Height:</label><input id="height" type="text"/></li>
-          <li><label>Path Width:</label><input id="pathwidth" type="text"/></li>
-          <li><label>Wall Width:</label><input id="wallwidth" type="text"/></li>
-          <li><label>Outer Width:</label><input id="outerwidth" type="text"/></li>
-          <li><label>Path Color:</label><input id="pathcolor" type="text"/></li>
-          <li><label>Wall Color:</label><input id="wallcolor" type="text"/></li>
-          <li><label>Seed:</label><input id="seed" type="text"/></li>
-          <li><input id="randomseed" type="button" value="Random Seed"/></li>
-        </ul>
-      </div>
+        <div style="text-align:center;">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+        
+        <script src="./codeMaker.js"></script>
+        <script src="./main.js"></script>
+        <script src="./mazeCreator.js"></script>
+        <script src="./mazeCreatorExample.js"></script>
 
-
-    <script src="./codeMaker.js"></script>
-    <script src="./main.js"></script>
-    <script src="./mazeCreator.js"></script>
 </body>
 </html>
