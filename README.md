@@ -1,3 +1,5 @@
+![Ironhack Logo](https://i.imgur.com/1QgrNNw.png)
+
 # ironhack-project1-craze-maze
 
 Project #1: The Game
