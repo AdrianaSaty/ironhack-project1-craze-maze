@@ -19,18 +19,22 @@ function setup(){
     drawLines();
 
     for (let i=1; i<grid.length; i++){
-        
+        //STEP 1
         let nextAvailableNeigbor =  currentCell.checkNeigbors();
         console.log('nexNeig', nextAvailableNeigbor)
         if( nextAvailableNeigbor){
             nextAvailableNeigbor.visited = true;
             currentCell = nextAvailableNeigbor;
             currentCell.visited = true;
+        //STEP 3
+            removeWalls(currentCell, nextAvailableNeigbor);
+
+        //STEP 4
             currentCell.showVisited()
             
         }
+        // drawLines()
     }
-   
 }
 
 
@@ -50,12 +54,30 @@ function index(i, j){
     return  i + (j)*cols;
 }
 
-
-
 function drawLines() {
     for (let i=0; i<grid.length; i++){
         grid[i].showLines(); 
     }
+}
+
+function removeWalls(a, b){
+    let x = a.i - b.i;
+    if( x === 1){
+        a.walls[3] = false;
+        b.walls[1] = false;
+    } else if ( x === -1){
+        a.walls[1] = false;
+        b.walls[3] = false;
+    }
+    let y = a.j - b.j;
+    if( y === 1){
+        a.walls[0] = false;
+        b.walls[2] = false;
+    } else if ( x === -1){
+        a.walls[2] = false;
+        b.walls[0] = false;
+    }
+
 }
 
 class Cell {
@@ -116,7 +138,7 @@ console.log('neigbors',neigbors)
         let x = this.i*w;
         let y = this.j*w;
         // this.ctx.strokeStyle = "#54fd02"; //COR VERDE NEON
-        this.ctx.strokeStyle = 'red';
+        this.ctx.strokeStyle = '#54fd02';
         this.ctx.lineWidth = 5;
     
 
@@ -151,8 +173,10 @@ console.log('neigbors',neigbors)
         let x = this.i*w;
         let y = this.j*w;
         if( this.visited){ //fill the visited cells
-            this.ctx.fillStyle = "#de944d";
+            this.ctx.beginPath();
+            this.ctx.fillStyle = "white";
             this.ctx.fillRect(x, y, x+w, y+w);
+            this.ctx.stroke();
         }
     }
     

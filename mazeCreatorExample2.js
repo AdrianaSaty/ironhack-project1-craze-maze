@@ -1,3 +1,7 @@
+// sem tirar as paredes
+
+
+
 let widthCanvas = 200;
 let heightCanvas = 200
 canvas.width = widthCanvas;
@@ -11,12 +15,28 @@ let currentCell;
 cols = (widthCanvas/w);
 rows = (heightCanvas/w);
 
-function index(i, j){
-    if(i<0 || j<0 || i>cols-1 || j>rows-1){
-        return -1;
+function setup(){
+    createNewCells();
+    currentCell = grid[0]
+    currentCell.visited = true;
+    currentCell.showVisited()
+    drawLines();
+
+    for (let i=1; i<grid.length; i++){
+        
+        let nextAvailableNeigbor =  currentCell.checkNeigbors();
+        console.log('nexNeig', nextAvailableNeigbor)
+        if( nextAvailableNeigbor){
+            nextAvailableNeigbor.visited = true;
+            currentCell = nextAvailableNeigbor;
+            currentCell.visited = true;
+            currentCell.showVisited()
+            
+        }
     }
-    return  i + (j)*cols;
+   
 }
+
 
 function createNewCells(){
     for (var j=0; j<rows; j++){
@@ -27,33 +47,19 @@ function createNewCells(){
     }
 }
 
-function checkCellNeigbors(){
-    currentCell = grid[10]
-    currentCell.checkNeigbors();
-    for (let i=0; i<grid.length; i++){
-        let nextAvailableNeigbor =  currentCell.checkNeigbors();
-        if( nextAvailableNeigbor){
-            nextAvailableNeigbor.visited = true;
-            currentCell = nextAvailableNeigbor;
-            currentCell = grid[i]
-            currentCell.visited = true;
-        }
-        
-        
+function index(i, j){
+    if(i<0 || j<0 || i>cols-1 || j>rows-1){
+        return -1;
     }
-    
+    return  i + (j)*cols;
 }
 
-function draw() {
-    setTimeout(function() {
-        requestAnimationFrame(draw);
-        for (let i=0; i<grid.length; i++){
-            grid[i].show(); 
-        // console.log('grid.visited', grid[0].visited)
-            currentCell = grid[i]
-        }
-        currentCell.visited = true;
-    }, 100);
+
+
+function drawLines() {
+    for (let i=0; i<grid.length; i++){
+        grid[i].showLines(); 
+    }
 }
 
 class Cell {
@@ -68,19 +74,19 @@ class Cell {
     }
 
     checkNeigbors() {
-        console.log('i',this.i,'   j',this.j, '  grid[index]',[ index (this.i, this.j - 1) ])
+        // console.log('i',this.i,'   j',this.j, '  grid[index]', grid[ index (this.i, this.j - 1) ])
 
         let neigbors = [];
-            
         let top = grid[ index (this.i, this.j - 1) ];
         let right = grid[ index (this.i + 1, this.j) ];
         let bottom = grid[ index(this.i, this.j+1)];
         let left = grid[ index(this.i-1, this.j)];
         
-        console.log('top', grid[ index (this.i, this.j - 1) ]);
-        console.log('right', grid[ index (this.i + 1, this.j) ] );
-        console.log('bottom', grid[ index(this.i, this.j+1) ] );
-        console.log('left', grid[index(this.i-1, this.j) ] );
+
+        // console.log('top', grid[ index (this.i, this.j - 1) ]);
+        // console.log('right', grid[ index (this.i + 1, this.j) ] );
+        // console.log('bottom', grid[ index(this.i, this.j+1) ] );
+        // console.log('left', grid[index(this.i-1, this.j) ] );
 
         
         if(top && !top.visited){ //top is not undefined && hasn't been visited
@@ -95,11 +101,13 @@ class Cell {
         if(left && !left.visited){
             neigbors.push(left);
         }
-
+console.log('neigbors',neigbors)
         if( neigbors.length>0){
             let randomValue = Math.floor(Math.random()*(neigbors.length + 1)); //verificar isso depois !!!!!!!!!!!!
             // console.log('random', randomValue);
             // console.log('neigbors.length', neigbors.length );
+
+            console.log('neig escoliho',neigbors[randomValue])
 
             return neigbors[randomValue];
         } else {
@@ -107,7 +115,8 @@ class Cell {
         }
     }
 
-    show() {
+
+    showLines() {
         let x = this.i*w;
         let y = this.j*w;
         // this.ctx.strokeStyle = "#54fd02"; //COR VERDE NEON
@@ -139,6 +148,12 @@ class Cell {
             this.ctx.lineTo(x, y);
             this.ctx.stroke();
         } 
+      
+    }
+
+    showVisited(){
+        let x = this.i*w;
+        let y = this.j*w;
         if( this.visited){ //fill the visited cells
             this.ctx.fillStyle = "#de944d";
             this.ctx.fillRect(x, y, x+w, y+w);
@@ -147,8 +162,4 @@ class Cell {
     
 }
 
-
-createNewCells()
-currentCell = grid[0] //onde colocar?
-checkCellNeigbors()
-draw()
+setup();
