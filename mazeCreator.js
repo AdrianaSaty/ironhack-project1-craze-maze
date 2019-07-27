@@ -23,14 +23,15 @@ function setup(){
         let nextAvailableNeigbor =  currentCell.checkNeigbors();
         console.log('nexNeig', nextAvailableNeigbor)
         if( nextAvailableNeigbor){
+            console.log('currentCell', currentCell)
             nextAvailableNeigbor.visited = true;
+            removeWalls(currentCell, nextAvailableNeigbor);
             currentCell = nextAvailableNeigbor;
             currentCell.visited = true;
         //STEP 3
-            removeWalls(currentCell, nextAvailableNeigbor);
 
         //STEP 4
-            currentCell.showVisited()
+            // currentCell.showVisited()
             
         }
         // drawLines()
