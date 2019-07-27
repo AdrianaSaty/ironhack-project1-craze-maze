@@ -4,92 +4,16 @@ let w = 40;
 let grid = []; 
 let stack = []; 
 let current; 
-let frame = 0;
-
-
+let start = false;
 
 let canvas = document.querySelector("canvas");
 canvas.width = 400;
 canvas.height = 400;
 let ctx = canvas.getContext("2d");
 
-
 let background = canvas.getContext("2d");
 background.fillStyle = "black";
 background.fillRect(0, 0, canvas.width, canvas.height);
-
-
-
-function drawMaze() {
-
-cols = canvas.width / w;  
-rows = canvas.height / w; 
-
-
-    for ( let j=0; j<rows; j++ ) {
-
-    for ( let i=0; i<cols; i++ ) {
-
-    grid.push(new Cell(i, j)); 
-    }
-}
-
-current = grid[0]; 
-current.visited = true; 
-stack.push(current); 
-current.highlight(); 
-}
-
-function randomRangeInt(min, max) { return Math.floor(Math.random() * (max - min) + min); }
-
-function index(i, j) {
-  if ( i<0 || j<0 || i > cols-1 || j > rows-1 ) { return -1; }
- return i + j * cols;
-}
-
-
-function run() {
-
-  let next = current.checkNeighbors(); 
-
-  if (next) {
-
-    next.visited = true; 
-    stack.push(next);
-    removeWall(current, next);
-    current.draw();
-    next.highlight();
-    current = next;
-  } else if (stack.length > 0) {
-    current.draw();
-    current = stack.pop();
-    current.highlight();
-  } 
-}
-
-
-function removeWall(current, next) {
-
-  let xx = current.i - next.i;
-  let yy = current.j - next.j;
-
-  if (xx === 1) {
-    current.wall[3] = false;
-    next.wall[1] = false;
-  } else if (xx === -1) {
-    current.wall[1] = false;
-    next.wall[3] = false;    
-  }
-  
-  if (yy === 1) {
-    current.wall[0] = false;
-    next.wall[2] = false;
-  } else if (yy === -1) {
-    current.wall[2] = false;
-    next.wall[0] = false;
-  }
-
-}
 
 
 class Cell {
@@ -133,23 +57,35 @@ class Cell {
 
   draw()  {   
     if ( !this.visited ) {
-
-      ctx.fillStyle = "black";
-      ctx.fillRect(this.x, this.y, w, w);
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, w, w);
     } else {
-
-      ctx.fillStyle = "black";
-      ctx.fillRect(this.x, this.y, w, w);
-     
-      ctx.beginPath();
-
-      ctx.strokeStyle = '#54fd02';
-      if ( this.wall[0] ) { ctx.moveTo(this.x+w, this.y);  ctx.lineTo(this.x, this.y); }
-      if ( this.wall[1] ) { ctx.moveTo(this.x+w, this.y+w); ctx.lineTo(this.x+w, this.y); } 
-      if ( this.wall[2] ) { ctx.moveTo(this.x, this.y+w); ctx.lineTo(this.x+w, this.y+w); } 
-      if ( this.wall[3] ) { ctx.moveTo(this.x, this.y); ctx.lineTo(this.x, this.y+w); } 
-      ctx.stroke();
-  }
+        ctx.fillStyle = "black";
+        ctx.fillRect(this.x, this.y, w, w);
+        ctx.beginPath();
+        ctx.strokeStyle = '#54fd02';
+    //top line
+    if( this.wall[0] ) {
+        ctx.moveTo(this.x, this.y); 
+        ctx.lineTo(this.x+w, this.y);
+    }
+    //right line
+    if( this.wall[1] ) {
+        ctx.moveTo(this.x+w, this.y);
+        ctx.lineTo(this.x+w, this.y+w);
+    }
+    //botton line
+    if(this. wall[2] ) {
+        ctx.moveTo(this.x+w, this.y+w);
+        ctx.lineTo(this.x, this.y+w);
+    }
+    //left line
+    if( this.wall[3] ) {
+        ctx.moveTo(this.x, this.y+w);
+        ctx.lineTo(this.x, this.y);
+    }
+    ctx.stroke();
+    }
   }
 
 } 
@@ -166,7 +102,7 @@ class Player {
       
     }
     
-    update() {
+    updatePosition() {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
@@ -179,40 +115,95 @@ class Player {
 
     left() {
         return this.x;
-      }
-      right() {
-        return this.x + this.width;
-      }
-      top() {
-        return this.y;
-      }
-      bottom() {
-        return this.y + this.height;
-      }
-    
-      crashWith(obstacle) {
-        return !(
-          this.bottom() < obstacle.top() ||
-          this.top() > obstacle.bottom() ||
-          this.right() < obstacle.left() ||
-          this.left() > obstacle.right()
-        );
-      }
     }
+    right() {
+    return this.x + this.width;
+    }
+    top() {
+    return this.y;
+    }
+    bottom() {
+    return this.y + this.height;
+    }
+
+    crashWith(obstacle) {
+        return !(
+            this.bottom() < obstacle.top() ||
+            this.top() > obstacle.bottom() ||
+            this.right() < obstacle.left() ||
+            this.left() > obstacle.right()
+        );
+    }
+}
 
 
 let player = new Player(15, 15, "red", 10, 10);
 
-drawMaze(); 
-setInterval(function(){ run(); }, 1);
-setInterval(function(){ player.newPosition(); }, 0);
-setInterval(function(){ player.update(); }, 0);
+
+function drawGrid() {
+    cols = canvas.width / w;  
+    rows = canvas.height / w; 
+
+    for ( let j=0; j<rows; j++ ) {
+        for ( let i=0; i<cols; i++ ) {
+            grid.push(new Cell(i, j)); 
+        }
+    }
+
+    current = grid[0]; 
+    current.visited = true; 
+    stack.push(current); 
+    current.highlight(); 
+}
 
 
+function randomRangeInt(min, max) { return Math.floor(Math.random() * (max - min) + min); }
 
 
+function index(i, j) {
+    if ( i<0 || j<0 || i > cols-1 || j > rows-1 ) { return -1; }
+    return i + j * cols;
+}
 
 
+function runToRemoveWalls() {
+  let next = current.checkNeighbors(); 
+  if (next) {
+    next.visited = true; 
+    stack.push(next);
+    removeWall(current, next);
+    current.draw();
+    next.highlight();
+    current = next;
+  } else if (stack.length > 0) {
+    current.draw();
+    current = stack.pop();
+    current.highlight();
+  } 
+  start = true;
+}
+
+
+function removeWall(current, next) {
+  let xx = current.i - next.i;
+  let yy = current.j - next.j;
+  if (xx === 1) {
+    current.wall[3] = false;
+    next.wall[1] = false;
+  } else if (xx === -1) {
+    current.wall[1] = false;
+    next.wall[3] = false;    
+  }
+  
+  if (yy === 1) {
+    current.wall[0] = false;
+    next.wall[2] = false;
+  } else if (yy === -1) {
+    current.wall[2] = false;
+    next.wall[0] = false;
+  }
+
+}
 
 
 document.onkeydown = function(e) {
@@ -241,6 +232,19 @@ player.speedY = 0;
 
 
 
+function startGame() {
+    runToRemoveWalls();
+
+    if(start){
+        player.newPosition();
+        player.updatePosition();
+    }
+
+    requestAnimationFrame(startGame);
+
+}
 
 
+drawGrid();
+startGame()
 
