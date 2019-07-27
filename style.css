@@ -11,25 +11,26 @@
    color: #54fd02
 }
 
-.titleGame {
+h1 {
     font-size: 50px;
     color: #54fd02;
-    display: flex;
-    justify-content: space-around;
+    text-align: center;
+    margin-top: 0;
 }
-
-
-canvas {
-    border: 10px solid darkslategrey;
-    background-color: black;
-}
-
 
 h2 {
     text-align: center;
-    color: #54fd02
+    color: #54fd02;
 }
 
+p {
+    line-height: 150%;
+}
+
+canvas {
+    border: 3px solid #54fd02;
+    background-color: black;
+}
 
 .button::-moz-focus-inner{
     border: 0;
@@ -40,6 +41,11 @@ h2 {
     display: flex;
     justify-content: space-around;
     margin: 30px 0;
+}
+
+.links {
+    display: flex;
+    justify-content: space-around;
 }
 
 
@@ -69,6 +75,22 @@ h2 {
 .justify-content-left{
     display: flex;
     justify-content: flex-end;
+}
+
+.justify-content-center{
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    margin: 20px 40px 0 0;
+}
+
+.center{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button-left{

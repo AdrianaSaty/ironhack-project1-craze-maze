@@ -1,186 +1,248 @@
-//tirando as paredes
+
+// let cols, rows; 
+// let w = 40; 
+// let grid = []; 
+// let stack = []; 
+// let current; 
+// let frame = 0;
 
 
-let widthCanvas = 200;
-let heightCanvas = 200
-canvas.width = widthCanvas;
-canvas.height = heightCanvas;
 
-let cols, rows;
-let w = 40;
-let grid = [];
-let currentCell;
-
-cols = (widthCanvas/w);
-rows = (heightCanvas/w);
-
-function setup(){
-    createNewCells();
-    currentCell = grid[0]
-    currentCell.visited = true;
-    currentCell.showVisited()
-    drawLines();
-
-    for (let i=1; i<grid.length; i++){
-        //STEP 1
-        let nextAvailableNeigbor =  currentCell.checkNeigbors();
-        console.log('nexNeig', nextAvailableNeigbor)
-        if( nextAvailableNeigbor){
-            nextAvailableNeigbor.visited = true;
-            currentCell = nextAvailableNeigbor;
-            currentCell.visited = true;
-        //STEP 3
-            // removeWalls(currentCell, nextAvailableNeigbor);
-
-        //STEP 4
-            currentCell.showVisited()
-            
-        }
-        // drawLines()
-    }
-}
+// let canvas = document.querySelector("canvas");
+// canvas.width = 400;
+// canvas.height = 400;
+// let ctx = canvas.getContext("2d");
 
 
-function createNewCells(){
-    for (var j=0; j<rows; j++){
-        for (let i=0; i<rows; i++){
-            let cell = new Cell(i,j);
-            grid.push(cell);
-        }
-    }
-}
+// let background = canvas.getContext("2d");
+// background.fillStyle = "black";
+// background.fillRect(0, 0, canvas.width, canvas.height);
 
-function index(i, j){
-    if(i<0 || j<0 || i>cols-1 || j>rows-1){
-        return -1;
-    }
-    return  i + (j)*cols;
-}
 
-function drawLines() {
-    for (let i=0; i<grid.length; i++){
-        grid[i].showLines(); 
-    }
-}
 
-// function removeWalls(a, b){
-//     let x = a.i - b.i;
-//     if( x === 1){
-//         a.walls[3] = false;
-//         b.walls[1] = false;
-//     } else if ( x === -1){
-//         a.walls[1] = false;
-//         b.walls[3] = false;
+// function init() {
+  
+//   cols = canvas.width / w;  
+//   rows = canvas.height / w; 
+  
+
+//      for ( let j=0; j<rows; j++ ) {
+    
+//        for ( let i=0; i<cols; i++ ) {
+
+//         grid.push(new Cell(i, j)); 
+//       }
 //     }
-//     let y = a.j - b.j;
-//     if( y === 1){
-//         a.walls[0] = false;
-//         b.walls[2] = false;
-//     } else if ( x === -1){
-//         a.walls[2] = false;
-//         b.walls[0] = false;
-//     }
+
+//     current = grid[0]; 
+//     current.visited = true; 
+//     stack.push(current); 
+//     current.highlight(); 
+//   }
+
+// function randomRangeInt(min, max) { return Math.floor(Math.random() * (max - min) + min); }
+
+// function index(i, j) {
+//   if ( i<0 || j<0 || i > cols-1 || j > rows-1 ) { return -1; }
+//  return i + j * cols;
+// }
+
+
+// function run() {
+
+//   let next = current.checkNeighbors(); 
+
+//   if (next) {
+
+//     next.visited = true; 
+//     stack.push(next);
+//     removeWall(current, next);
+//     current.draw();
+//     next.highlight();
+//     current = next;
+//   } else if (stack.length > 0) {
+//     current.draw();
+//     current = stack.pop();
+//     current.highlight();
+//   } 
+// }
+
+
+// function removeWall(current, next) {
+
+//   let xx = current.i - next.i;
+//   let yy = current.j - next.j;
+
+//   if (xx === 1) {
+//     current.wall[3] = false;
+//     next.wall[1] = false;
+//   } else if (xx === -1) {
+//     current.wall[1] = false;
+//     next.wall[3] = false;    
+//   }
+  
+//   if (yy === 1) {
+//     current.wall[0] = false;
+//     next.wall[2] = false;
+//   } else if (yy === -1) {
+//     current.wall[2] = false;
+//     next.wall[0] = false;
+//   }
 
 // }
 
-class Cell {
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
 
-    constructor(i, j) {
-        this.i = i;
-        this.j = j; 
-        this.walls = [true, true, true, true]; //[top, right, botton, left]
-        this.visited = false;        
-    }
+// function Cell(i, j) {
 
-    checkNeigbors() {
-        // console.log('i',this.i,'   j',this.j, '  grid[index]', grid[ index (this.i, this.j - 1) ])
-
-        let neigbors = [];
-        let top = grid[ index (this.i, this.j - 1) ];
-        let right = grid[ index (this.i + 1, this.j) ];
-        let bottom = grid[ index(this.i, this.j+1)];
-        let left = grid[ index(this.i-1, this.j)];
-        
-
-        // console.log('top', grid[ index (this.i, this.j - 1) ]);
-        // console.log('right', grid[ index (this.i + 1, this.j) ] );
-        // console.log('bottom', grid[ index(this.i, this.j+1) ] );
-        // console.log('left', grid[index(this.i-1, this.j) ] );
-
-        
-        if(top && !top.visited){ //top is not undefined && hasn't been visited
-            neigbors.push(top);
-        }
-        if(right && !right.visited){
-            neigbors.push(right);
-        }
-        if(bottom && !bottom.visited){
-            neigbors.push(bottom);
-        }
-        if(left && !left.visited){
-            neigbors.push(left);
-        }
-console.log('neigbors',neigbors)
-        if( neigbors.length>0){
-            let randomValue = Math.floor(Math.random()*(neigbors.length + 1)); //verificar isso depois !!!!!!!!!!!!
-            // console.log('random', randomValue);
-            // console.log('neigbors.length', neigbors.length );
-
-            console.log('neig escoliho',neigbors[randomValue])
-
-            return neigbors[randomValue];
-        } else {
-            return 'undefined';
-        }
-    }
+//   this.i = i;
+//   this.j = j;
+//   this.x = i * w;
+//   this.y = j * w;
+//   this.wall = ['true', 'true', 'true', 'true'];
+//   this.visited = false;
 
 
-    showLines() {
-        let x = this.i*w;
-        let y = this.j*w;
-        // this.ctx.strokeStyle = "#54fd02"; //COR VERDE NEON
-        this.ctx.strokeStyle = 'red';
-        this.ctx.lineWidth = 5;
-    
+//   this.checkNeighbors = () => {
 
-        if( this.walls[0] ) {
-            this.ctx.beginPath(); //top line
-            this.ctx.moveTo(x, y);
-            this.ctx.lineTo(x+w, y);
-            this.ctx.stroke();
-        }
-        if( this.walls[1] ) {
-            this.ctx.beginPath(); //right line
-            this.ctx.moveTo(x+w, y);
-            this.ctx.lineTo(x+w, y+w);
-            this.ctx.stroke();
-        }
-        if(this. walls[2] ) {
-            this.ctx.beginPath(); //botton line
-            this.ctx.moveTo(x+w, y+w);
-            this.ctx.lineTo(x, y+w);
-            this.ctx.stroke();
-        }
-        if( this.walls[3] ) {
-            this.ctx.beginPath(); //left line
-            this.ctx.moveTo(x, y+w);
-            this.ctx.lineTo(x, y);
-            this.ctx.stroke();
-        } 
+//     let neighbors = [];
+
+//     let top =   grid[index(i, j-1)];
+//     let right = grid[index(i+1, j)];
+//     let bot =   grid[index(i, j+1)];
+//     let left =  grid[index(i-1, j)];
+
+//     if ( top && !top.visited) { neighbors.push(top); }       
+//     if ( right && !right.visited) { neighbors.push(right); }  
+//     if ( bot && !bot.visited) { neighbors.push(bot); }       
+//     if ( left && !left.visited) { neighbors.push(left); }     
+
+//     if ( neighbors.length > 0 ) { 
+
+//       var r = randomRangeInt(0, neighbors.length); 
+//       return neighbors[r];
+//     } else {
+//       return undefined;
+//     }
+//   }
+
+
+//   this.highlight = () => { 
+  
+//     // ctx.fillStyle = "#1a1a1a";
+//     ctx.fillStyle = "black";
+
+//     ctx.fillRect(this.x, this.y, w, w);
+//   }
+
+//   this.draw = () => {   
+  
+//     if ( !this.visited ) {
+
+//       ctx.fillStyle = "black";
+//       ctx.fillRect(this.x, this.y, w, w);
+//     } else {
+
+//       ctx.fillStyle = "black";
+//       ctx.fillRect(this.x, this.y, w, w);
+     
+//       ctx.beginPath();
+
+//       ctx.strokeStyle = '#54fd02';
+//       if ( this.wall[0] ) { ctx.moveTo(this.x+w, this.y);  ctx.lineTo(this.x, this.y); }
+//       if ( this.wall[1] ) { ctx.moveTo(this.x+w, this.y+w); ctx.lineTo(this.x+w, this.y); } 
+//       if ( this.wall[2] ) { ctx.moveTo(this.x, this.y+w); ctx.lineTo(this.x+w, this.y+w); } 
+//       if ( this.wall[3] ) { ctx.moveTo(this.x, this.y); ctx.lineTo(this.x, this.y+w); } 
+//       ctx.stroke();
+//   }
+//   }
+
+// } 
+
+
+
+// init(); 
+// setInterval(function(){ run(); }, 1);
+// // setInterval(function(){ player.update()}, 0)
+// setInterval(function(){ player.newPos()}, 0)
+// setInterval(function(){ player.update()}, 0)
+
+
+
+
+// class Component {
+//     constructor(width, height, color, x, y) {
+//       this.width = width;
+//       this.height = height;
+//       this.color = color;
+//       this.x = x;
+//       this.y = y;
+//       this.speedX = 0;
+//       this.speedY = 0;
       
-    }
-
-    showVisited(){
-        let x = this.i*w;
-        let y = this.j*w;
-        if( this.visited){ //fill the visited cells
-            this.ctx.fillStyle = "#de944d";
-            this.ctx.fillRect(x, y, x+w, y+w);
-        }
-    }
+//     }
     
-}
+//     update() {
+//         ctx.fillStyle = this.color;
+//         ctx.fillRect(this.x, this.y, this.width, this.height);
+//     }
+    
+//     newPos() {
+//       this.x += this.speedX;
+//       this.y += this.speedY;
+//     }
 
-setup();
+//     left() {
+//         return this.x;
+//       }
+//       right() {
+//         return this.x + this.width;
+//       }
+//       top() {
+//         return this.y;
+//       }
+//       bottom() {
+//         return this.y + this.height;
+//       }
+    
+//       crashWith(obstacle) {
+//         return !(
+//           this.bottom() < obstacle.top() ||
+//           this.top() > obstacle.bottom() ||
+//           this.right() < obstacle.left() ||
+//           this.left() > obstacle.right()
+//         );
+//       }
+//     }
+
+// let player = new Component(15, 15, "red", 10, 10);
+
+//       document.onkeydown = function(e) {
+//           console.log('onkeydown')
+//     switch (e.keyCode) {
+//       case 38: // up arrow
+//         player.speedY -= 1;
+//         break;
+//       case 40: // down arrow
+//         player.speedY += 1;
+//         break;
+//       case 37: // left arrow
+//         player.speedX -= 1;
+//         break;
+//       case 39: // right arrow
+//         player.speedX += 1;
+//         break;
+//     }
+//   };
+
+//   document.onkeyup = function(e) {
+//       console.log('oi')
+//     player.speedX = 0;
+//     player.speedY = 0;
+
+//   };
+
+
+
+
+
+
