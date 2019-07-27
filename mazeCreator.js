@@ -20,25 +20,25 @@ background.fillRect(0, 0, canvas.width, canvas.height);
 
 
 
-function init() {
-  
-  cols = canvas.width / w;  
-  rows = canvas.height / w; 
-  
+function drawMaze() {
 
-     for ( let j=0; j<rows; j++ ) {
-    
-       for ( let i=0; i<cols; i++ ) {
+cols = canvas.width / w;  
+rows = canvas.height / w; 
 
-        grid.push(new Cell(i, j)); 
-      }
+
+    for ( let j=0; j<rows; j++ ) {
+
+    for ( let i=0; i<cols; i++ ) {
+
+    grid.push(new Cell(i, j)); 
     }
+}
 
-    current = grid[0]; 
-    current.visited = true; 
-    stack.push(current); 
-    current.highlight(); 
-  }
+current = grid[0]; 
+current.visited = true; 
+stack.push(current); 
+current.highlight(); 
+}
 
 function randomRangeInt(min, max) { return Math.floor(Math.random() * (max - min) + min); }
 
@@ -92,24 +92,24 @@ function removeWall(current, next) {
 }
 
 
-function Cell(i, j) {
+class Cell {
+    constructor(i, j) {
+        this.i = i;
+        this.j = j;
+        this.x = i * w;
+        this.y = j * w;
+        this.wall = ['true', 'true', 'true', 'true'];
+        this.visited = false;
+      }
 
-  this.i = i;
-  this.j = j;
-  this.x = i * w;
-  this.y = j * w;
-  this.wall = ['true', 'true', 'true', 'true'];
-  this.visited = false;
-
-
-  this.checkNeighbors = () => {
+  checkNeighbors() {
 
     let neighbors = [];
 
-    let top =   grid[index(i, j-1)];
-    let right = grid[index(i+1, j)];
-    let bot =   grid[index(i, j+1)];
-    let left =  grid[index(i-1, j)];
+    let top =   grid[index(this.i, this.j-1)];
+    let right = grid[index(this.i+1, this.j)];
+    let bot =   grid[index(this.i, this.j+1)];
+    let left =  grid[index(this.i-1, this.j)];
 
     if ( top && !top.visited) { neighbors.push(top); }       
     if ( right && !right.visited) { neighbors.push(right); }  
@@ -126,16 +126,12 @@ function Cell(i, j) {
   }
 
 
-  this.highlight = () => { 
-  
-    // ctx.fillStyle = "#1a1a1a";
+  highlight() { 
     ctx.fillStyle = "black";
-
     ctx.fillRect(this.x, this.y, w, w);
   }
 
-  this.draw = () => {   
-  
+  draw()  {   
     if ( !this.visited ) {
 
       ctx.fillStyle = "black";
@@ -158,17 +154,7 @@ function Cell(i, j) {
 
 } 
 
-
-
-init(); 
-setInterval(function(){ run(); }, 1);
-setInterval(function(){ player.newPos()}, 0)
-setInterval(function(){ player.update()}, 0)
-
-
-
-
-class Component {
+class Player {
     constructor(width, height, color, x, y) {
       this.width = width;
       this.height = height;
@@ -185,9 +171,10 @@ class Component {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     
-    newPos() {
-      this.x += this.speedX;
-      this.y += this.speedY;
+    newPosition() {
+            ctx.clearRect(this.x, this.y, this.width, this.height);
+        this.x += this.speedX;
+        this.y += this.speedY;
     }
 
     left() {
@@ -213,10 +200,22 @@ class Component {
       }
     }
 
-let player = new Component(15, 15, "red", 10, 10);
 
-      document.onkeydown = function(e) {
-          console.log('onkeydown')
+let player = new Player(15, 15, "red", 10, 10);
+
+drawMaze(); 
+setInterval(function(){ run(); }, 1);
+setInterval(function(){ player.newPosition(); }, 0);
+setInterval(function(){ player.update(); }, 0);
+
+
+
+
+
+
+
+
+document.onkeydown = function(e) {
     switch (e.keyCode) {
       case 38: // up arrow
         player.speedY -= 1;
@@ -231,14 +230,14 @@ let player = new Component(15, 15, "red", 10, 10);
         player.speedX += 1;
         break;
     }
-  };
+};    
 
-  document.onkeyup = function(e) {
-      console.log('oi')
-    player.speedX = 0;
-    player.speedY = 0;
 
-  };
+document.onkeyup = function(e) {
+    console.log('oi')
+player.speedX = 0;
+player.speedY = 0;
+};
 
 
 
