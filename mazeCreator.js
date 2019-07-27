@@ -162,5 +162,86 @@ function Cell(i, j) {
 
 init(); 
 setInterval(function(){ run(); }, 1);
+setInterval(function(){ player.newPos()}, 0)
+setInterval(function(){ player.update()}, 0)
+
+
+
+
+class Component {
+    constructor(width, height, color, x, y) {
+      this.width = width;
+      this.height = height;
+      this.color = color;
+      this.x = x;
+      this.y = y;
+      this.speedX = 0;
+      this.speedY = 0;
+      
+    }
+    
+    update() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    
+    newPos() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+    }
+
+    left() {
+        return this.x;
+      }
+      right() {
+        return this.x + this.width;
+      }
+      top() {
+        return this.y;
+      }
+      bottom() {
+        return this.y + this.height;
+      }
+    
+      crashWith(obstacle) {
+        return !(
+          this.bottom() < obstacle.top() ||
+          this.top() > obstacle.bottom() ||
+          this.right() < obstacle.left() ||
+          this.left() > obstacle.right()
+        );
+      }
+    }
+
+let player = new Component(15, 15, "red", 10, 10);
+
+      document.onkeydown = function(e) {
+          console.log('onkeydown')
+    switch (e.keyCode) {
+      case 38: // up arrow
+        player.speedY -= 1;
+        break;
+      case 40: // down arrow
+        player.speedY += 1;
+        break;
+      case 37: // left arrow
+        player.speedX -= 1;
+        break;
+      case 39: // right arrow
+        player.speedX += 1;
+        break;
+    }
+  };
+
+  document.onkeyup = function(e) {
+      console.log('oi')
+    player.speedX = 0;
+    player.speedY = 0;
+
+  };
+
+
+
+
 
 
