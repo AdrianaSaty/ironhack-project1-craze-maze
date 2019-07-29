@@ -1,9 +1,14 @@
-
 let cols, rows; 
 let w = 40; 
 let grid = []; 
 let stack = []; 
-let current; 
+let currentDrawGrid; 
+let currentPlayerGrid; 
+let currentPlayerIndex;
+let currentPlayerPositionX;
+let currentPlayerPositionY;
+let currentPlayerPositionI;
+
 let start = false;
 
 let canvas = document.querySelector("canvas");
@@ -22,71 +27,76 @@ class Cell {
         this.j = j;
         this.x = i * w;
         this.y = j * w;
-        this.wall = ['true', 'true', 'true', 'true'];
+        this.wall = ['true', 'true', 'true', 'true']; //top, right, bottom, left
         this.visited = false;
       }
 
-  checkNeighbors() {
-
-    let neighbors = [];
-
-    let top =   grid[index(this.i, this.j-1)];
-    let right = grid[index(this.i+1, this.j)];
-    let bot =   grid[index(this.i, this.j+1)];
-    let left =  grid[index(this.i-1, this.j)];
-
-    if ( top && !top.visited) { neighbors.push(top); }       
-    if ( right && !right.visited) { neighbors.push(right); }  
-    if ( bot && !bot.visited) { neighbors.push(bot); }       
-    if ( left && !left.visited) { neighbors.push(left); }     
-
-    if ( neighbors.length > 0 ) { 
-
-      var r = randomRangeInt(0, neighbors.length); 
-      return neighbors[r];
-    } else {
-      return undefined;
+    grid(){
+        console.log(`grid[${index(i,j)}]`)
+        return `grid[${index(i,j)}]`;
     }
-  }
+
+    checkNeighbors() {
+
+        let neighbors = [];
+
+        let top =   grid[index(this.i, this.j-1)];
+        let right = grid[index(this.i+1, this.j)];
+        let bot =   grid[index(this.i, this.j+1)];
+        let left =  grid[index(this.i-1, this.j)];
+
+        if ( top && !top.visited) { neighbors.push(top); }       
+        if ( right && !right.visited) { neighbors.push(right); }  
+        if ( bot && !bot.visited) { neighbors.push(bot); }       
+        if ( left && !left.visited) { neighbors.push(left); }     
+
+        if ( neighbors.length > 0 ) { 
+
+        var r = randomRangeInt(0, neighbors.length); 
+        return neighbors[r];
+        } else {
+        return undefined;
+        }
+    }
 
 
-  highlight() { 
-    ctx.fillStyle = "black";
-    ctx.fillRect(this.x, this.y, w, w);
-  }
-
-  draw()  {   
-    if ( !this.visited ) {
+    highlight() { 
         ctx.fillStyle = "black";
         ctx.fillRect(this.x, this.y, w, w);
-    } else {
-        ctx.fillStyle = "black";
-        ctx.fillRect(this.x, this.y, w, w);
-        ctx.beginPath();
-        ctx.strokeStyle = '#54fd02';
-    //top line
-    if( this.wall[0] ) {
-        ctx.moveTo(this.x, this.y); 
-        ctx.lineTo(this.x+w, this.y);
     }
-    //right line
-    if( this.wall[1] ) {
-        ctx.moveTo(this.x+w, this.y);
-        ctx.lineTo(this.x+w, this.y+w);
+
+    draw()  {   
+        if ( !this.visited ) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(this.x, this.y, w, w);
+        } else {
+            ctx.fillStyle = "black";
+            ctx.fillRect(this.x, this.y, w, w);
+            ctx.beginPath();
+            ctx.strokeStyle = '#54fd02';
+        //top line
+        if( this.wall[0] ) {
+            ctx.moveTo(this.x, this.y); 
+            ctx.lineTo(this.x+w, this.y);
+        }
+        //right line
+        if( this.wall[1] ) {
+            ctx.moveTo(this.x+w, this.y);
+            ctx.lineTo(this.x+w, this.y+w);
+        }
+        //botton line
+        if(this. wall[2] ) {
+            ctx.moveTo(this.x+w, this.y+w);
+            ctx.lineTo(this.x, this.y+w);
+        }
+        //left line
+        if( this.wall[3] ) {
+            ctx.moveTo(this.x, this.y+w);
+            ctx.lineTo(this.x, this.y);
+        }
+        ctx.stroke();
+        }
     }
-    //botton line
-    if(this. wall[2] ) {
-        ctx.moveTo(this.x+w, this.y+w);
-        ctx.lineTo(this.x, this.y+w);
-    }
-    //left line
-    if( this.wall[3] ) {
-        ctx.moveTo(this.x, this.y+w);
-        ctx.lineTo(this.x, this.y);
-    }
-    ctx.stroke();
-    }
-  }
 
 } 
 
@@ -108,36 +118,75 @@ class Player {
     }
     
     newPosition() {
-            ctx.clearRect(this.x, this.y, this.width, this.height);
+        ctx.clearRect(this.x, this.y, this.width, this.height);
         this.x += this.speedX;
         this.y += this.speedY;
+        currentPlayerPositionX = this.x;
+        currentPlayerPositionY = this.y;
     }
 
+    top() {
+        return this.y;
+    }
+    right() {
+        return this.x + this.width;
+    }
+    bottom() {
+        return this.y + this.height;
+    }
     left() {
         return this.x;
     }
-    right() {
-    return this.x + this.width;
-    }
-    top() {
-    return this.y;
-    }
-    bottom() {
-    return this.y + this.height;
+
+    crashTop(currentPlayerGrid) {
+        this.currentPlayerGrid = currentPlayerGrid;
+
+        // console.log('TOP player',this.top()) //position of player
+        // console.log('TOP grid ',this.currentPlayerGrid.j * 40)
+        if( this.top() < this.currentPlayerGrid.y ){
+            console.log('TOP perdeu')
+        } 
     }
 
-    crashWith(obstacle) {
-        return !(
-            this.bottom() < obstacle.top() ||
-            this.top() > obstacle.bottom() ||
-            this.right() < obstacle.left() ||
-            this.left() > obstacle.right()
-        );
+    crashRight(currentPlayerGrid) {
+        this.currentPlayerGrid = currentPlayerGrid;
+
+        // console.log('RIGHT player',this.right()) //position of player
+        // console.log('RIGHT ',this.currentPlayerGrid.x + w )
+        
+        if( this.right() > this.currentPlayerGrid.x + w ){
+            console.log("RIGHT perdeu___")
+        } 
     }
+
+    crashBottom(currentPlayerGrid) {
+        this.currentPlayerGrid = currentPlayerGrid;
+
+        // console.log('BOTTOM player',this.bottom()) //position of player
+        // console.log('BOTTOM ',this.currentPlayerGrid.x + w )
+        
+        if( this.bottom() > this.currentPlayerGrid.y + w ){
+            console.log("BOTTOM perdeu __")
+        } 
+    }
+    
+    crashLeft(currentPlayerGrid) {
+        this.currentPlayerGrid = currentPlayerGrid;
+
+        console.log('LEFT player',this.bottom()) //position of player
+        console.log('LEFT ',this.currentPlayerGrid.x )
+        
+        if( this.left() < this.currentPlayerGrid.x ){
+            console.log("LEFT perdeu __")
+        } 
+    }
+
+
 }
 
 
 let player = new Player(15, 15, "red", 10, 10);
+
 
 
 function drawGrid() {
@@ -150,10 +199,10 @@ function drawGrid() {
         }
     }
 
-    current = grid[0]; 
-    current.visited = true; 
-    stack.push(current); 
-    current.highlight(); 
+    currentDrawGrid = grid[0]; 
+    currentDrawGrid.visited = true; 
+    stack.push(currentDrawGrid); 
+    currentDrawGrid.highlight(); 
 }
 
 
@@ -167,39 +216,39 @@ function index(i, j) {
 
 
 function runToRemoveWalls() {
-  let next = current.checkNeighbors(); 
+  let next = currentDrawGrid.checkNeighbors(); 
   if (next) {
     next.visited = true; 
     stack.push(next);
-    removeWall(current, next);
-    current.draw();
+    removeWall(currentDrawGrid, next);
+    currentDrawGrid.draw();
     next.highlight();
-    current = next;
+    currentDrawGrid = next;
   } else if (stack.length > 0) {
-    current.draw();
-    current = stack.pop();
-    current.highlight();
+    currentDrawGrid.draw();
+    currentDrawGrid = stack.pop();
+    currentDrawGrid.highlight();
   } 
   start = true;
 }
 
 
-function removeWall(current, next) {
-  let xx = current.i - next.i;
-  let yy = current.j - next.j;
+function removeWall(currentDrawGrid, next) {
+  let xx = currentDrawGrid.i - next.i;
+  let yy = currentDrawGrid.j - next.j;
   if (xx === 1) {
-    current.wall[3] = false;
+    currentDrawGrid.wall[3] = false;
     next.wall[1] = false;
   } else if (xx === -1) {
-    current.wall[1] = false;
+    currentDrawGrid.wall[1] = false;
     next.wall[3] = false;    
   }
   
   if (yy === 1) {
-    current.wall[0] = false;
+    currentDrawGrid.wall[0] = false;
     next.wall[2] = false;
   } else if (yy === -1) {
-    current.wall[2] = false;
+    currentDrawGrid.wall[2] = false;
     next.wall[0] = false;
   }
 
@@ -209,39 +258,70 @@ function removeWall(current, next) {
 document.onkeydown = function(e) {
     switch (e.keyCode) {
       case 38: // up arrow
+
         player.speedY -= 1;
+
         break;
       case 40: // down arrow
         player.speedY += 1;
+
         break;
       case 37: // left arrow
+
         player.speedX -= 1;
+
         break;
       case 39: // right arrow
         player.speedX += 1;
+
         break;
     }
+
 };    
 
 
+
 document.onkeyup = function(e) {
-    console.log('oi')
-player.speedX = 0;
-player.speedY = 0;
+    player.speedX = 0;
+    player.speedY = 0;
+
+    currentPlayerIndex= index(Math.trunc( (currentPlayerPositionX + player.width/2)/w) , Math.trunc( (currentPlayerPositionY + player.height/2)/w) );
+    currentPlayerGrid = grid[currentPlayerIndex]
+    console.log('grid',currentPlayerGrid)
+
+    if( currentPlayerGrid.wall[0]){
+        player.crashTop(currentPlayerGrid);
+    }
+
+    // console.log('WALL RIGHT', currentPlayerGrid.wall[1])
+
+
+    if( currentPlayerGrid.wall[1]){
+        player.crashRight(currentPlayerGrid);
+    }
+
+    if( currentPlayerGrid.wall[2]){
+        player.crashBottom(currentPlayerGrid);
+    }
+
+    if( currentPlayerGrid.wall[3]){
+        player.crashLeft(currentPlayerGrid);
+    }
+
+
 };
 
 
 
 function startGame() {
     runToRemoveWalls();
-
     if(start){
         player.newPosition();
         player.updatePosition();
     }
 
-    requestAnimationFrame(startGame);
 
+    requestAnimationFrame(startGame);
 }
 
 
