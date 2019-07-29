@@ -13,3 +13,4 @@ index(0,1) = 10
 4. comecar setando a grid[0] como visitada 
 3. verificar se algum "vizinho" da célula ainda nao foi visitado
 4. gerar um código randomico para partir para o visinho de uma célula
+

@@ -8,6 +8,7 @@ let currentPlayerIndex;
 let currentPlayerPositionX;
 let currentPlayerPositionY;
 let currentPlayerPositionI;
+let gameOverBoolean = false;
 
 let start = false;
 
@@ -118,11 +119,14 @@ class Player {
     }
     
     newPosition() {
-        ctx.clearRect(this.x, this.y, this.width, this.height);
-        this.x += this.speedX;
-        this.y += this.speedY;
-        currentPlayerPositionX = this.x;
-        currentPlayerPositionY = this.y;
+        if(!gameOverBoolean){
+            ctx.clearRect(this.x, this.y, this.width, this.height);
+            this.x += this.speedX;
+            this.y += this.speedY;
+            currentPlayerPositionX = this.x;
+            currentPlayerPositionY = this.y;
+        }
+
     }
 
     top() {
@@ -145,6 +149,8 @@ class Player {
         // console.log('TOP grid ',this.currentPlayerGrid.j * 40)
         if( this.top() < this.currentPlayerGrid.y ){
             console.log('TOP perdeu')
+            gameOver();
+            return true;
         } 
     }
 
@@ -187,7 +193,14 @@ class Player {
 
 let player = new Player(15, 15, "red", 10, 10);
 
-
+function gameOver(){
+    gameOverBoolean = true;
+    let imgGameOver = new Image();
+    imgGameOver.src = './Images/game_over.png';
+    imgGameOver.onload = () => {
+      ctx.drawImage(imgGameOver, 50,100)
+    }
+}
 
 function drawGrid() {
     cols = canvas.width / w;  
@@ -258,7 +271,6 @@ function removeWall(currentDrawGrid, next) {
 document.onkeydown = function(e) {
     switch (e.keyCode) {
       case 38: // up arrow
-
         player.speedY -= 1;
 
         break;
