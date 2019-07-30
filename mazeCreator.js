@@ -217,6 +217,15 @@ function winner(){
     }
 }
 
+
+function drawFlag(){
+    let imgGameOver = new Image();
+    imgGameOver.src = './Images/red_flag.png';
+    imgGameOver.onload = () => {
+        ctx.drawImage(imgGameOver, 370, 370, 25 , 25)
+    }
+}
+
 function drawGrid() {
     cols = canvas.width / w;  
     rows = canvas.height / w; 
@@ -312,8 +321,7 @@ document.onkeyup = function(e) {
     player.speedX = 0;
     player.speedY = 0;
 
-    currentPlayerIndex= index(Math.trunc( (currentPlayerPositionX + player.width/2)/w) , Math.trunc( (currentPlayerPositionY + player.height/2)/w) );
-    currentPlayerGrid = grid[currentPlayerIndex]
+
     console.log('grid',currentPlayerGrid)
 
     if( currentPlayerGrid.wall[0]){
@@ -343,12 +351,14 @@ let player = new Player(15, 15, "red", 10, 10);
 function startGame() {
     runToRemoveWalls();
     if(start){
-        
+        currentPlayerIndex= index(Math.trunc( (currentPlayerPositionX + player.width/2)/w) , Math.trunc( (currentPlayerPositionY + player.height/2)/w) );
+        currentPlayerGrid = grid[currentPlayerIndex]
 
         player.newPosition();
         player.updatePosition();
         winner();
     }
+    drawFlag()
 
 
     requestAnimationFrame(startGame);
@@ -357,4 +367,5 @@ function startGame() {
 
 drawGrid();
 startGame()
+
 
