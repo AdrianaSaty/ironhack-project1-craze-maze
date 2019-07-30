@@ -7,10 +7,10 @@ let currentPlayerGrid;
 let currentPlayerIndex;
 let currentPlayerPositionX;
 let currentPlayerPositionY;
-let currentPlayerPositionI;
 let gameOverBoolean = false;
 
 let start = false;
+let startPlayer = false;
 
 let canvas = document.querySelector("canvas");
 canvas.width = 400;
@@ -150,7 +150,6 @@ class Player {
         if( this.top() < this.currentPlayerGrid.y ){
             console.log('TOP perdeu')
             gameOver();
-            return true;
         } 
     }
 
@@ -162,6 +161,8 @@ class Player {
         
         if( this.right() > this.currentPlayerGrid.x + w ){
             console.log("RIGHT perdeu___")
+            gameOver();
+
         } 
     }
 
@@ -173,6 +174,8 @@ class Player {
         
         if( this.bottom() > this.currentPlayerGrid.y + w ){
             console.log("BOTTOM perdeu __")
+            gameOver();
+
         } 
     }
     
@@ -184,6 +187,8 @@ class Player {
         
         if( this.left() < this.currentPlayerGrid.x ){
             console.log("LEFT perdeu __")
+            gameOver();
+
         } 
     }
 
@@ -191,14 +196,24 @@ class Player {
 }
 
 
-let player = new Player(15, 15, "red", 10, 10);
 
 function gameOver(){
     gameOverBoolean = true;
     let imgGameOver = new Image();
     imgGameOver.src = './Images/game_over.png';
     imgGameOver.onload = () => {
-      ctx.drawImage(imgGameOver, 50,100)
+      ctx.drawImage(imgGameOver, 20, 20)
+    }
+}
+
+function winner(){
+    if( currentPlayerIndex === 99){
+        gameOverBoolean = true;
+        let imgGameOver = new Image();
+        imgGameOver.src = './Images/winner.png';
+        imgGameOver.onload = () => {
+          ctx.drawImage(imgGameOver, 20, 100)
+        }
     }
 }
 
@@ -323,13 +338,16 @@ document.onkeyup = function(e) {
 
 };
 
-
+let player = new Player(15, 15, "red", 10, 10);
 
 function startGame() {
     runToRemoveWalls();
     if(start){
+        
+
         player.newPosition();
         player.updatePosition();
+        winner();
     }
 
 
