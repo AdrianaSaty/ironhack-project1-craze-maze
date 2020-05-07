@@ -1,56 +1,43 @@
-![Ironhack Logo](https://i.imgur.com/1QgrNNw.png)
+# Craze Maze
 
-# ironhack-project1-craze-maze
+This is the first project as part of my Web Development Bootcamp at IronHack Brazil.
 
-Project #1: The Game
-Overview
-Let’s start with something fun - a game!
 
-Everyone will get a chance to be creative, and work through some really tough programming challenges. Since you’ve already gotten your feet wet with games such as 2048, it’s up to you to come up with a fun and interesting game to build.
+## Acknowledgments
 
-You will be working individually for this project, but we’ll be guiding you along the process and helping you as you go. Show us what you’ve got!
+First of all I would like to say THANKS to my teachers, my colleagues and all IronHack staff that helped me achieve the goal of publishing my first iterative game. It was a real challenge for me and all support and fun times shared between us all made all the difference, and for that I'll be aways gratefull!!
 
-Technical Requirements
-Your app must:
+## Getting Started
 
-Render a game in the browser
-Switch turns between two players
-Design logic for winning & visually display which player won
-Include separate HTML / CSS / JavaScript files
-Stick with KISS (Keep It Simple Stupid) and DRY (Don’t Repeat Yourself) principles
-Use Javascript or jQuery for DOM manipulation
-Deploy your game online to GitHub Pages, where the rest of the world can access it
-Use semantic markup for HTML and CSS (adhere to best practices)
-Necessary Deliverables
-A working game, built by you that runs in the browser
-A deploy of your game in GitHub Pages
-A link to your hosted working game in the URL section of your GitHub repo
-A readme.md file with explanations of the technologies used, the approach taken, installation instructions, unsolved problems, etc.
-Suggested Ways to Get Started
-Break the project down into different steps (logic & data structures, layout and rendering, DOM manipulation & user interaction). Use whiteboards to conceptualize your game!
-Use your Development Tools (console.log, inspector, alert statements, etc) to debug and solve problems
-Work through the lessons in class & ask questions when you need to! Think about adding relevant code to your game each night, instead of, you know… procrastinating
-Commit early, commit often, don’t be afraid to break something because you can always go back in time to a previous version
-Consult documentation resources (MDN, jQuery, etc.) to understand better the tools you are using & the available help you will get
-Don’t be afraid of the black screen, make it work and, if needed, refactor your code. If you need to create code (as in console.log) to test what you are doing, you can always delete it
-  
-Useful Resources
-MDN Javascript Docs (a great reference for all things Vanilla Javascript)
-jQuery Docs (if you’re using jQuery)
-Github Pages (for hosting your game)
-Project Feedback + Evaluation
-Technical Requirements: Did you deliver a project that met all the technical requirements? Given what the class has covered so far, did you build something that was reasonably complex?
+This game works at the browser and does not need any installation.
 
-Creativity: Did you added a personal spin or creative element into your project submission? Did you deliver something engaging and playable to the end user?
+* Link to run the game in your browser => [HERE](https://adrianasaty.github.io/ironhack-project1-craze-maze/index.html).
 
-Code Quality: Did you follow code style guidance and best practices covered in class, such as spacing, modularity, and semantic naming?
+## Prerequisites
 
-Deployment: Did you deploy your application to a public url using GitHub Pages?
+No hardware prerequisites needed. Just run the game and have fun!
 
-Total: Your instructors will give you a total score on your project between:
+## Game Algorithm
+To create all the logic that created a different maze every time the player starts a new game, I used a Maze generation algorithm called ['Recursive backtracker'](https://en.wikipedia.org/wiki/Maze_generation_algorithm).
+1- First I drew a grid full of walls, with the same numbers of columns and rows.
+2- I used an array to control which cells was already visited. Starting the first cell (0,0) marking it as visited.
+3- While the current cell has any unvisited neighbour cells, I choose randomly one of the unvisited neighbours and remove the wall between the current cell and the chosen cell. Then I 'go' to the chosen cell and it starts all this process again.
 
-Score	Expectations
-0	Does not meet expectations
-1	Meets expectactions, good job!
-2	Exceeds expectations, you wonderful creature, you!
-This will be useful as an overall gauge of whether you met the project goals, but the more important scores are described in the specs above, which can help you identify where to focus your efforts for the next project!
+
+
+## Game and Coding Improvements
+
+During the project I had to make some adaptations in order to present a functional game. Other implementations couldn't be implemented so far due to the short schedule. Although, there are many improvements that can be made in the came itself and in it's code.
+1- Organize the code better and separate some functions in different js files
+2- Fix some bugs like rendering, or prevent the player to move when the maze is been built 
+
+
+## Contributing
+
+Please feel free to fork/clone this repo to look deeper into this funny game and contribute with some of the above improvements if you like. I plan to work on it in the future as well :-)
+
+## Author & Version Control
+
+* **Adriana Saty Bertelli** - *Craze Maze Version 0.1* - **Published in Jun-29th of 2019**
+
+
