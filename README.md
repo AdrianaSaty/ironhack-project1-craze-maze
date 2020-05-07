@@ -1,10 +1,11 @@
-
-![](https://media.giphy.com/media/MYyR0kmQrl9XgKlJvB/giphy.gif)
-
 # Craze Maze
 
 This is the first project as part of my Web Development Bootcamp at IronHack Brazil.
 
+
+![](https://media.giphy.com/media/MYyR0kmQrl9XgKlJvB/giphy.gif)
+
+<iframe src="https://giphy.com/embed/RitJwWi3NceyWZ20GS" width="480" height="464" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/RitJwWi3NceyWZ20GS">via GIPHY</a></p>
 
 ## Acknowledgments
 
