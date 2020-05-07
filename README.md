@@ -1,4 +1,4 @@
-https://gph.is/g/EJWBPVV
+https://media.giphy.com/media/MYyR0kmQrl9XgKlJvB/giphy.gif
 
 # Craze Maze
 
