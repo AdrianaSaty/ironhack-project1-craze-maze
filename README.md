@@ -1,4 +1,5 @@
-https://media.giphy.com/media/MYyR0kmQrl9XgKlJvB/giphy.gif
+
+![](https://media.giphy.com/media/MYyR0kmQrl9XgKlJvB/giphy.gif)
 
 # Craze Maze
 
